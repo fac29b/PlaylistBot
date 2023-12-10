@@ -2,36 +2,39 @@ require('dotenv/config');
 // Will give us access to all the .env variables
 
 const { Client } = require('discord.js');
-const { OpenAI } = require('openai');
 
 const client = new Client({
     intents: ['Guilds', 'GuildMembers', 'GuildMessages', 'MessageContent']
 });
 
-
 client.on('ready', () => {
     console.log('The bot is alive!');
 });
 
-const IGNORE_PREFIX = '!';
 const CHANNELS = ['1182322735817441320']
 // bots channel only for now - can add any channel ID here as needed in the future
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_KEY,
-})
-
-
 /////////
-// Spotify Code:
+// Spotify chatbot code:
 ////////
-const Spotify = require('spotify-web-api-node');
-const spotify = new Spotify({
+const SpotifyWebAPI = require('spotify-web-api-node');
+const spotifyApi = new SpotifyWebAPI({
   clientId: 'de9e50d0184a457c833586593572744a',
   clientSecret: process.env.SPOTKEY,
   redirectUri: 'http://localhost:3000/',
 });
 
+// Code to check connection to spotify API by console logging Elvis info
+spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE').then(
+    function(data) {
+      console.log('Artist albums', data.body);
+    },
+    function(err) {
+      console.error(err);
+    }
+  );
+
+// Start of Chatbot Code
 client.on('messageCreate', async (message) => {
     console.log(`Client heard message and should show content here: ${message.content}`);
     if (message.content.startsWith("!play")) {
@@ -41,8 +44,15 @@ client.on('messageCreate', async (message) => {
         var songname = message.content.replace('!play ', '');
         console.log(`Song name: ${songname}`);
 
-        spotify.search({ type: 'track', query: songname, limit: 1 }, function(err, data) {
-            console.log('Spotify API data:', data);
+        spotifyApi.searchArtists(songname)
+            .then(function(data) {
+                console.log(`Search artists by ${songname}`, data.body);
+            }, function(err) {
+                console.error(err);
+            });
+
+        // spotify.search({ type: 'track', query: songname, limit: 1 }, function(err, data) {
+        //     console.log('Spotify API data:', data);
         //   if (err) {
         //     return message.channel.send('An error occurred: ' + err);
         //   }
@@ -52,7 +62,7 @@ client.on('messageCreate', async (message) => {
         //   let trackDetails = `Track: ${track.name} \nArtist(s): ${track.artists.map(artist => artist.name).join(', ')} \nAlbum: ${track.album.name} \nListen on Spotify: ${track.external_urls.spotify}`;
           
         //   message.channel.send(trackDetails);
-        });
+        // });
     }
     // if (error) {
     //     console.error('Spotify API error:', err);
@@ -64,9 +74,17 @@ client.on('messageCreate', async (message) => {
 
 client.login(process.env.TOKEN);
 
+/////////
+// OpenAI code set up code:
+/////////
+// const { OpenAI } = require('openai');
+// const openai = new OpenAI({
+//     apiKey: process.env.OPENAI_KEY,
+// })
+// const IGNORE_PREFIX = '!';
 
 /////////
-// Chat GPT-4 code:
+// Chat GPT-4 chatbot code:
 /////////
 // client.on('messageCreate', async (message) => {
 //     if (message.author.bot) return;
