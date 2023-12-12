@@ -52,6 +52,7 @@ const getToken = async () => {
   
       // Use the access token for making authenticated requests to the Spotify API
       // ...
+      spotifyApi.setAccessToken(access-token);
   
     } catch (error) {
       console.error('Error obtaining access token:', error.message);
@@ -62,7 +63,7 @@ const getToken = async () => {
   getToken();
 
 // Replace the following line with the actual access token you obtained
-const accessToken = 'BQC4umkgtUxIB4Y5jy_wIF6xbtV4IZA2S4rhEy5qLZN7Tnwm77uCleWYF5N7V_TTHDLMCYQkdw-8kwxB2Bibkby_hBIRFBEiWa18fmfjXjejKZKwW50';
+const accessToken = 'BQA6N-QvRfzjKUUsEfwxvFriCl5duKyoaK6n8jAnNHpODcsreHNgxDvaUeN0dYvliqJuW9ViafH2wjEnCCwIDUerJvYsYMc2upVBJEfiiXs7nLjfoi0';
 
 // Set the access token in the Spotify API object
 spotifyApi.setAccessToken(accessToken);
