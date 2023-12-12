@@ -1,13 +1,14 @@
-const express = require('express');
-const querystring = require('querystring');
-const axios = require('axios');
-const { DateTime } = require('luxon');
+import express from 'express';
+import querystring from 'querystring';
+import axios from 'axios';
+import { DateTime } from 'luxon';
+import 'dotenv/config';
 
 const app = express();
 app.use(express.json());
 
 const CLIENT_ID = '2c52abffbc8742d2b5441acdc4aec18d';
-const CLIENT_SECRET = 'f874e5cdb5c44a6ea0994487fce28d13';
+const CLIENT_SECRET = process.env.CLIENT_SECRET
 const REDIRECT_URI = 'http://localhost:8888/callback';
 
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
@@ -15,7 +16,7 @@ const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const API_BASE_URL = 'https://api.spotify.com/v1/';
 
 let session = {};
-let address = '';
+export let address = '';
 
 app.get('/', (req, res) => {
   res.send("Welcome to the Spotify app <a href='/login'>Login</a>");
@@ -135,3 +136,9 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+
+
+export const testing = 'the test has passed';
+export function test() {
+    console.log('test passed', testing);
+}

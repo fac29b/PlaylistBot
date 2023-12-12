@@ -50,3 +50,7 @@ client.on('messageCreate', async function(message){
 // log the bot into the discord server
 client.login(process.env.DISCORD_TOKEN);
 console.log('chatbot is online on discord');
+
+import {test} from './spotifyApi.js';
+
+test();
