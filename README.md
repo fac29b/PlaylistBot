@@ -85,6 +85,6 @@ Feel free to contribute to this project. If you have suggestions or find issues,
 
 ## Contributors
 
-PlaylistBot was developed collaboratively by @Feargh and @fintonius.
+PlaylistBot was developed collaboratively by [Feargh](https://github.com/Feargh) and [fintonius](https://github.com/fintonius).
 
 ##  Thank you for reading!
