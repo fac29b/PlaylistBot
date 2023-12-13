@@ -1,12 +1,13 @@
-require('dotenv/config');
+import 'dotenv/config';
 // Will give us access to all the .env variables
-const axios = require('axios');
+import axios from 'axios';
 // the axios library in Node.js to make HTTP requests
 
-const clientId = 'b9187564d05d46e891a197b24dc20983';
+// Spotify client info
+const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTKEY;
 
-const { Client } = require('discord.js');
+import { Client } from 'discord.js';
 
 const client = new Client({
     intents: ['Guilds', 'GuildMembers', 'GuildMessages', 'MessageContent']
@@ -22,7 +23,7 @@ const CHANNELS = ['1182322735817441320']
 /////////
 // Spotify chatbot code:
 ////////
-const SpotifyWebAPI = require('spotify-web-api-node');
+import SpotifyWebAPI from 'spotify-web-api-node';
 const spotifyApi = new SpotifyWebAPI({
   clientId: clientId,
   clientSecret: clientSecret,
@@ -62,7 +63,7 @@ const getToken = async () => {
   getToken();
 
 // Replace the following line with the actual access token you obtained
-const accessToken = 'BQC4umkgtUxIB4Y5jy_wIF6xbtV4IZA2S4rhEy5qLZN7Tnwm77uCleWYF5N7V_TTHDLMCYQkdw-8kwxB2Bibkby_hBIRFBEiWa18fmfjXjejKZKwW50';
+const accessToken = 'BQDJt8C5m5vTKHHs9AZE1bn-HeZgC9F_DEe_PHHbH6Au2_1wCaAbCdJQTbUvFryeCFVmebAbcK_IH9GbJBkzlqoLsVMTsJyuOB0Yozz9kiuKw3BrdMo';
 
 // Set the access token in the Spotify API object
 spotifyApi.setAccessToken(accessToken);
@@ -87,12 +88,20 @@ client.on('messageCreate', async (message) => {
         var songname = message.content.replace('!play ', '');
         console.log(`Song name: ${songname}`);
 
-        spotifyApi.searchArtists(songname)
-            .then(function(data) {
-                console.log(`Search artists by ${songname}`, data.body);
-            }, function(err) {
-                console.error(err);
-            });
+        // Trying this code with an await (old conde currently below)
+        try {
+            const data = await spotifyApi.searchArtists(songname);
+            console.log(`Search artists by ${songname}`, data.body);
+        } catch (error) {
+            console.error('Error searching artists:', error);
+        }
+
+        // spotifyApi.searchArtists(songname)
+        //     .then(function(data) {
+        //         console.log(`Search artists by ${songname}`, data.body);
+        //     }, function(err) {
+        //         console.error(err);
+        //     });
 
         // spotify.search({ type: 'track', query: songname, limit: 1 }, function(err, data) {
         //     console.log('Spotify API data:', data);
