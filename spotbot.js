@@ -1,5 +1,10 @@
 require('dotenv/config');
 // Will give us access to all the .env variables
+const axios = require('axios');
+// the axios library in Node.js to make HTTP requests
+
+const clientId = 'b9187564d05d46e891a197b24dc20983';
+const clientSecret = process.env.SPOTKEY;
 
 const { Client } = require('discord.js');
 
@@ -19,13 +24,51 @@ const CHANNELS = ['1182322735817441320']
 ////////
 const SpotifyWebAPI = require('spotify-web-api-node');
 const spotifyApi = new SpotifyWebAPI({
-  clientId: 'de9e50d0184a457c833586593572744a',
-  clientSecret: process.env.SPOTKEY,
+  clientId: clientId,
+  clientSecret: clientSecret,
   redirectUri: 'http://localhost:3000/',
 });
 
-// Code to check connection to spotify API by console logging Elvis info
-spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE').then(
+// To get the access tokens to spotify API
+const getToken = async () => {
+    try {
+      const response = await axios.post('https://accounts.spotify.com/api/token', null, {
+        params: {
+          grant_type: 'client_credentials',
+        },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        auth: {
+          username: clientId,
+          password: clientSecret,
+        },
+      });
+  
+      const { access_token, token_type, expires_in } = response.data;
+      console.log('Access Token:', access_token);
+      console.log('Token Type:', token_type);
+      console.log('Expires In:', expires_in);
+  
+      // Use the access token for making authenticated requests to the Spotify API
+      // ...
+  
+    } catch (error) {
+      console.error('Error obtaining access token:', error.message);
+    }
+  };
+  
+  // Call the function to obtain the access token
+  getToken();
+
+// Replace the following line with the actual access token you obtained
+const accessToken = 'BQAuHJVmD7shsoTcVtSTBRgfYjKU78hjy6aM-pDwDwY5B3armLkTcw5RX4QyhQ2fCI3eXkS4t-MOAWMNeDc6jK8CnmdJ8t5UZxgtkcpTAYfT_auV-lY';
+
+// Set the access token in the Spotify API object
+spotifyApi.setAccessToken(accessToken);
+
+// Code to check connection to spotify API by console logging an Elvis album info:
+spotifyApi.getAlbum('6oWz2hJ89n9mKarg3SO9ou').then(
     function(data) {
       console.log('Artist albums', data.body);
     },
@@ -33,6 +76,14 @@ spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE').then(
       console.error(err);
     }
   );
+
+  // Search tracks whose name, album or artist contains 'Love'
+  spotifyApi.searchTracks('Love')
+  .then(function(data) {
+    console.log('Search by "Love"', data.body);
+  }, function(err) {
+    console.error(err);
+  });
 
 // Start of Chatbot Code
 client.on('messageCreate', async (message) => {
