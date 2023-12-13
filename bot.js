@@ -13,7 +13,7 @@ client.on('ready', () => {
 });
 
 const IGNORE_PREFIX = '!';
-const CHANNELS = ['1182322735817441320']
+const CHANNELS = ['1182322735817441320', '1183851689481084959']
 // bots channel only for now - can add any channel ID here as needed in the future
 
 const openai = new OpenAI({
@@ -68,7 +68,7 @@ client.on('messageCreate', async (message) => {
     })
     
     const response = await openai.chat.completions.create({
-        model: 'gpt-4',
+        model: 'gpt-3.5-turbo',
         messages: conversation,
     })
     .catch((error) => console.error('OpenAI Error:\n', error));
