@@ -62,8 +62,6 @@ SPOTIFY_CLIENT_SECRET=your-spotify-client-secret
 SPOTKEY=your-spotify-client-secret
 ```
 
-
-
 Replace your-discord-token, your-spotify-client-id, your-spotify-client-secret, and your-openai-api-key with your actual tokens and keys.
 
 ## Usage
@@ -87,4 +85,6 @@ Feel free to contribute to this project. If you have suggestions or find issues,
 
 ## Contributors
 
-PlaylistBot was developed collaboratively by Your Name and Partner's Name.
+PlaylistBot was developed collaboratively by @Feargh and @fintonius.
+
+##  Thank you for reading!
