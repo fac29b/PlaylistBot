@@ -7,7 +7,7 @@ import 'dotenv/config';
 const app = express();
 app.use(express.json());
 
-const CLIENT_ID = '2c52abffbc8742d2b5441acdc4aec18d';
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET
 const REDIRECT_URI = 'http://localhost:8888/callback';
 

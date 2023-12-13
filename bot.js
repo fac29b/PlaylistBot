@@ -1,8 +1,8 @@
-require('dotenv/config');
+import 'dotenv/config';
 // Will give us access to all the .env variables
 
-const { Client } = require('discord.js');
-const { OpenAI } = require('openai');
+import { Client } from 'discord.js';
+import { OpenAI } from 'openai';
 
 const client = new Client({
     intents: ['Guilds', 'GuildMembers', 'GuildMessages', 'MessageContent']
