@@ -17,7 +17,7 @@ client.on('ready', () => {
     console.log('The bot is alive!');
 });
 
-const CHANNELS = ['1182322735817441320']
+const CHANNELS = ['1182322735817441320', '1183851689481084959']
 // bots channel only for now - can add any channel ID here as needed in the future
 
 /////////
@@ -50,23 +50,18 @@ const getToken = async () => {
       console.log('Access Token:', access_token);
       console.log('Token Type:', token_type);
       console.log('Expires In:', expires_in);
+
+      // Set the access token in the Spotify API object
+      spotifyApi.setAccessToken(access_token);
   
-      // Use the access token for making authenticated requests to the Spotify API
-      // ...
-  
+      return access_token;
     } catch (error) {
       console.error('Error obtaining access token:', error.message);
     }
   };
   
   // Call the function to obtain the access token
-  getToken();
-
-// Replace the following line with the actual access token you obtained
-const accessToken = 'BQDJt8C5m5vTKHHs9AZE1bn-HeZgC9F_DEe_PHHbH6Au2_1wCaAbCdJQTbUvFryeCFVmebAbcK_IH9GbJBkzlqoLsVMTsJyuOB0Yozz9kiuKw3BrdMo';
-
-// Set the access token in the Spotify API object
-spotifyApi.setAccessToken(accessToken);
+  const access_token = await getToken();
 
 // Code to check connection to spotify API by console logging an Elvis album info:
 spotifyApi.getAlbum('6oWz2hJ89n9mKarg3SO9ou').then(
@@ -88,13 +83,37 @@ client.on('messageCreate', async (message) => {
         var songname = message.content.replace('!play ', '');
         console.log(`Song name: ${songname}`);
 
-        // Trying this code with an await (old conde currently below)
+        // Trying this code with an await (old code currently below)
         try {
             const data = await spotifyApi.searchArtists(songname);
-            console.log(`Search artists by ${songname}`, data.body);
+            console.log(`Search artists by ${songname}`);
+
+            // Iterate through the array of artists and log all details
+            // data.body.artists.items.forEach((artist) => {
+            //     console.log('Artist Name:', artist.name);
+            //     message.channel.send(artist.name);
+            //     console.log('Spotify URL:', artist.external_urls.spotify);
+            //     message.channel.send(artist.external_urls.spotify);
+            //     console.log('------------------------');
+            //     message.channel.send('------------------------');
+            // });
+
+            // First 3 artists logged
+            for (let i = 0; i < Math.min(1, data.body.artists.items.length); i++) {
+                const artist = data.body.artists.items[i];
+                console.log('Artist Name:', artist.name);
+                message.channel.send(artist.name);
+                console.log('Spotify URL:', artist.external_urls.spotify);
+                message.channel.send(artist.external_urls.spotify);
+                console.log('------------------------');
+                message.channel.send('------------------------');
+            }
+            
         } catch (error) {
             console.error('Error searching artists:', error);
         }
+
+        
 
         // spotifyApi.searchArtists(songname)
         //     .then(function(data) {
@@ -109,7 +128,7 @@ client.on('messageCreate', async (message) => {
         //     return message.channel.send('An error occurred: ' + err);
         //   }
         
-        //   Log the track details
+        //   // Log the track details
         //   let track = data.tracks.items[0];
         //   let trackDetails = `Track: ${track.name} \nArtist(s): ${track.artists.map(artist => artist.name).join(', ')} \nAlbum: ${track.album.name} \nListen on Spotify: ${track.external_urls.spotify}`;
           
